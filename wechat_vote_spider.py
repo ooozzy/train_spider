@@ -53,7 +53,7 @@ for i in range(len(ips)):
             str_outcome = respond.content.decode()
             print(str_outcome)
             counts += 1
-            print("已经刷票成功{}次".format(counts))
+            print("已经刷票{}次".format(counts))
         except requests.exceptions.ConnectionError:
             print(ConnectionError)
             if ip[i] in ips:
