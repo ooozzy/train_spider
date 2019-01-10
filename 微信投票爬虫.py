@@ -25,21 +25,31 @@ headers1 = {
             }
 
 """获取代理IP"""
-url = "http://www.xicidaili.com/wt"
-headers = {"Accept": "text/html,application/xhtml+xml,application/xml;",
-        "Accept-Encoding": "gzip, deflate, sdch",
-        "Accept-Language": "zh-CN,zh;q=0.8,en;q=0.6",
-        "Referer": "http://www.xicidaili.com",
-        "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36"
-        }
-r = requests.get(url, headers=headers)
-soup = bs4.BeautifulSoup(r.text, 'html.parser')
-data = soup.table.find_all("td")
-ip_compile = re.compile(r'<td>(\d+\.\d+\.\d+\.\d+)</td>')  # 匹配IP
-port_compile = re.compile(r'<td>(\d+)</td>')  # 匹配端口
-ip = re.findall(ip_compile, str(data))  # 获取所有IP
-port = re.findall(port_compile, str(data))  # 获取所有端口
-ips = [":".join(i) for i in zip(ip, port)]  # 组合IP+端口，如：115.112.88.23:8080
+for p in range(1,11):
+
+
+    #刷票用的代理从第1页获取到第10页，跑完后改上面的页码重新跑
+
+
+
+
+    ips= []
+    url = "http://www.xicidaili.com/wt/{}".format(p)
+    headers = {"Accept": "text/html,application/xhtml+xml,application/xml;",
+            "Accept-Encoding": "gzip, deflate, sdch",
+            "Accept-Language": "zh-CN,zh;q=0.8,en;q=0.6",
+            "Referer": "http://www.xicidaili.com",
+            "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36"
+            }
+    r = requests.get(url, headers=headers)
+    soup = bs4.BeautifulSoup(r.text, 'html.parser')
+    data = soup.table.find_all("td")
+    ip_compile = re.compile(r'<td>(\d+\.\d+\.\d+\.\d+)</td>')  # 匹配IP
+    port_compile = re.compile(r'<td>(\d+)</td>')  # 匹配端口
+    ip = re.findall(ip_compile, str(data))  # 获取所有IP
+    port = re.findall(port_compile, str(data))  # 获取所有端口
+    ipt = [":".join(i) for i in zip(ip, port)]  # 组合IP+端口，如：115.112.88.23:8080
+    ips+=ipt
 
 #主函数
 
@@ -59,5 +69,3 @@ for i in range(len(ips)):
             if ip[i] in ips:
                 ips.remove(ips[i])
             break
-
-
