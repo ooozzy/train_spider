@@ -25,7 +25,7 @@ class Wallpapers_spider:
         except requests.ConnectTimeout:
             return None
 
-    def get_image(id,i):
+    def get_image(id,i,p):
         headers = {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36"
         }
@@ -33,7 +33,7 @@ class Wallpapers_spider:
         try:
             response = requests.get(url,headers=headers)
             if response.status_code == 200:
-                with open("{}/{}.jpg".format(today,i), "ab") as f:
+                with open("{}/{}.jpg".format(today,i+(p-1)*24, "ab") as f:
                     f.write(response.content)
                     print("保存成功")
         except requests.ConnectTimeout:
@@ -45,7 +45,7 @@ class Wallpapers_spider:
         for p in range(1,5):
             results = Wallpapers_spider.get_pic_response(p)
             for i in range(1,25):
-                Wallpapers_spider.get_image(results[i-1],i)
+                Wallpapers_spider.get_image(results[i-1],i,p)
         #2.将各个图片的url下载到本地
 
 if __name__=='__main__':
