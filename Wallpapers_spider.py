@@ -2,6 +2,7 @@ import requests
 import re
 import os
 import datetime
+import threading
 
 class Wallpapers_spider:
     def get_pic_response(r):
@@ -30,10 +31,11 @@ class Wallpapers_spider:
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36"
         }
         url = "https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-{}.jpg".format(id)
+        print(url)
         try:
             response = requests.get(url,headers=headers)
             if response.status_code == 200:
-                with open("{}/{}.jpg".format(today,i+(p-1)*24, "ab") as f:
+                with open("{}/{}.jpg".format(today,i+(p-1)*24), "ab") as f:
                     f.write(response.content)
                     print("保存成功")
         except requests.ConnectTimeout:
@@ -45,7 +47,8 @@ class Wallpapers_spider:
         for p in range(1,5):
             results = Wallpapers_spider.get_pic_response(p)
             for i in range(1,25):
-                Wallpapers_spider.get_image(results[i-1],i,p)
+                thread =threading.Thread(target=Wallpapers_spider.get_image,args=(results[i-1],i,p))
+                thread.start()
         #2.将各个图片的url下载到本地
 
 if __name__=='__main__':
